@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { fillObject, JwtAccessGuard, JwtRefreshGuard, UserData } from '@taskforce/core';
-import { TokenSession } from '@taskforce/shared-types';
 import CreateUserDto from '../user/dto/create-user.dto';
 import { UserRdo } from '../user/rdo/user.rdo';
 import { UserService } from '../user/user.service';
@@ -35,12 +34,8 @@ export class AuthController {
   })
   @Post('signup')
   async signupUser(@Headers('authorization') token: string, @Body() dto: CreateUserDto) {
-    let existSession: TokenSession;
-    if (token) {
-      const authToken = token.replace('Bearer', '').trim();
-      existSession = await this.authService.getSessionByToken(authToken);
-      }
-    if (existSession) {
+    const activeUserSession = await this.authService.checkAuthorizationStatus(token);
+    if (!!activeUserSession) {
       throw new UnauthorizedException(AuthApiError.AlreadyAuthorized)
     }
 

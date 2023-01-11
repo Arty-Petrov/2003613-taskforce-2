@@ -1,0 +1,7 @@
+From: Artyom <artyom.petrov@gmail.com>
+To: Keks <keks@htmlacademy.local>
+Subject: Hello word!
+Date: Th, 10 Jan 2022 14:39
+Content-Type: plain/text; charset=utf8
+
+Hi mate!

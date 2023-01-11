@@ -1,5 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { User } from '@taskforce/shared-types';
+import { ConflictException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { createEvent } from '@taskforce/core';
+import { CommandEvent, User } from '@taskforce/shared-types';
+import { RABBITMQ_SERVICE } from '../app.constant';
 import { LoginUserDto } from '../auth/dto/login-user.dto';
 import CreateUserDto from './dto/create-user.dto';
 import UpdateUserPasswordDto from './dto/update-user-password.dto';
@@ -12,7 +15,43 @@ import UserRepository from './user.repository';
 export class UserService {
   constructor(
     private readonly userRepository: UserRepository,
+    @Inject(RABBITMQ_SERVICE) private readonly rabbitClient: ClientProxy,
   ) {}
+
+  async create(dto: CreateUserDto): Promise<User | null>  {
+    const {
+      name, email, role, dateBirth,
+      city, password
+    } = dto;
+
+    const user = {
+      name, email, role, avatar: {}, dateBirth,
+      city, passwordHash: '',
+    } as User;
+
+    const existUser =
+      await this.userRepository.findByEmail(email);
+
+    if (existUser) {
+      throw new ConflictException(UserApiError.Exists);
+    }
+
+    const userEntity =
+      await new UserEntity(user).setPassword(password);
+
+    const createdUser = await this.userRepository.create(userEntity);
+
+    this.rabbitClient.emit(
+      createEvent(CommandEvent.AddSubscriber),
+      {
+        email: createdUser.email,
+        lastname: createdUser.name,
+        userId: createdUser._id.toString(),
+      }
+    );
+
+    return createdUser;
+  }
 
   async verifyUser (dto: LoginUserDto): Promise<User | null> {
     const {
@@ -30,29 +69,6 @@ export class UserService {
     }
 
     return userEntity;
-  }
-  async create(dto: CreateUserDto): Promise<User | null>  {
-    const {
-      name, email, role, dateBirth,
-      city, password
-    } = dto;
-
-    const user = {
-      name, email, role, avatar: {}, dateBirth,
-      city, passwordHash: '',
-    } as User;
-
-    const existUser =
-      await this.userRepository.findByEmail(email);
-
-    if (existUser) {
-      throw new Error(UserApiError.Exists);
-    }
-
-    const userEntity =
-      await new UserEntity(user).setPassword(password);
-
-    return this.userRepository.create(userEntity);
   }
 
   async getById(id: string): Promise<User | null>  {
