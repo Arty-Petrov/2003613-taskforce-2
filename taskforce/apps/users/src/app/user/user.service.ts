@@ -45,8 +45,9 @@ export class UserService {
       createEvent(CommandEvent.AddSubscriber),
       {
         email: createdUser.email,
-        lastname: createdUser.name,
+        name: createdUser.name,
         userId: createdUser._id.toString(),
+        role: createdUser.role,
       }
     );
 
