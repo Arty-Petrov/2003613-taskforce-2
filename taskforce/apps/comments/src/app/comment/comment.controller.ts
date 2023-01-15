@@ -31,7 +31,6 @@ export class CommentController {
   @Get('/')
 
   public async index(@Query () query: CommentQuery) {
-    console.log('comment controller index', query.taskId);
     const comments = await this.commentService.getComments(query);
     return fillObject(CommentRdo, comments);
   }
