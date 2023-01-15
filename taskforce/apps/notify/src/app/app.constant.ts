@@ -1,4 +1,5 @@
 export const NOTIFY_SERVICE_ENV_PATH = 'apps/notify/src/environments/.notify.env';
+export const RABBITMQ_SERVICE = Symbol('RABBITMQ_SERVICE');
 
 export enum EnvValidationMessage {
   DBHostRequired = 'MongoDB host is required',

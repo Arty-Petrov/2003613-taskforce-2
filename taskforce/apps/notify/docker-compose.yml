@@ -8,21 +8,6 @@ services:
       - "5025:5025"
       - "1083:5080"
 
-  rabbitmq:
-    image: rabbitmq:3.11-management
-    container_name: taskforce.notify.rabbitmq
-    ports:
-      - '1084:15672'
-      - '5672:5672'
-    environment:
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: test
-    healthcheck:
-      test: rabbitmq-diagnostics -q ping
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
   mongodb:
     image: mongo
     container_name: taskforce.notify.mongodb
