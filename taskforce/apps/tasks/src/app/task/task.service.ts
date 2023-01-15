@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { SortOrder, SortType, Task, TaskStatus, UserRole } from '@taskforce/shared-types';
 import * as util from 'util';
 import { TaskTagRepository } from '../task-tag/task-tag.repository';
@@ -89,6 +89,14 @@ export class TaskService {
     const taskEntity = new TaskEntity({ ...dto, dueDate: date, tags: taskTags, status: TaskStatus.New});
     return this.taskRepository.create(taskEntity);
   }
+  async getUnsentTasks(): Promise<Task[]> {
+    return this.taskRepository.findUnsent();
+  }
+
+  async markTasksAsSent(taskIds: number[]): Promise<HttpStatus>{
+    await this.taskRepository.markAsSent(taskIds);
+    return HttpStatus.NO_CONTENT
+  }
 
   async getNewTasks(filter: FilterParams, user: ActionData): Promise<Task[]>{
     const { userRole } = user;
@@ -111,7 +119,7 @@ export class TaskService {
   }
 
   async getTasks(filter: FilterParams): Promise<Task[]> {
-    return this.taskRepository.find(filter);
+    return this.taskRepository.findByFilter(filter);
   }
 
   async getTaskById(id: number) {
