@@ -20,5 +20,9 @@ import { EmailSubscriberModel, EmailSubscriberSchema } from './email-subscriber.
     EmailSubscriberService,
     EmailSubscriberRepository
   ],
+  exports: [
+    EmailSubscriberService,
+    EmailSubscriberRepository
+  ]
 })
 export class EmailSubscriberModule {}

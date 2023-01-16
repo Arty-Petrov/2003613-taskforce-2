@@ -11,12 +11,14 @@ import {
 } from '@nestjs/common';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 import { fillObject, JwtAccessGuard, JwtRefreshGuard, UserData } from '@taskforce/core';
+import { User } from '@taskforce/shared-types';
+import { CurrentUser } from '../decorators/current-user.decorator';
 import CreateUserDto from '../user/dto/create-user.dto';
 import { UserRdo } from '../user/rdo/user.rdo';
 import { UserService } from '../user/user.service';
 import { AuthApiError } from './auth.constant';
 import { AuthService } from './auth.service';
-import { LoginUserDto } from './dto/login-user.dto';
+import { LocalAuthGuard } from './guards/lockal-auth.guard';
 import { LoggedUserRdo } from './rdo/logged-user.rdo';
 import TokenDataRdo from './rdo/token-data.rdo';
 
@@ -50,10 +52,11 @@ export class AuthController {
     status: HttpStatus.OK,
     description: 'User has been successfully logged.'
   })
+  @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Body() dto: LoginUserDto) {
-    const verifiedUser = await this.userService.verifyUser(dto);
-    const tokenData = fillObject(TokenDataRdo, verifiedUser);
+  async login(@CurrentUser() user: User) {
+    // const verifiedUser = await this.userService.verifyUser(dto);
+    const tokenData = fillObject(TokenDataRdo, user);
     return this.authService.generateTokens(tokenData);
   }
 

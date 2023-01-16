@@ -1,1 +1,4 @@
-export const EMAIL_ADD_SUBSCRIBER_SUBJECT = 'Подписка на рассылку оформлена';
+export const  EmailSubject = {
+  AddSubscriber: 'Подписка на рассылку оформлена',
+  NewTasks: 'Новые задания на TaskForce',
+}

@@ -66,7 +66,6 @@ export function validateEnvironments(config: Record<string, unknown>) {
     config,
     { enableImplicitConversion: true  },
   );
-  console.log('VALIDATE',config);
 
   const errors = validateSync(
     environmentsConfig, {

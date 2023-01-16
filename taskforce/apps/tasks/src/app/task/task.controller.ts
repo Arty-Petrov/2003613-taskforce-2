@@ -13,10 +13,11 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
+import { Ctx, EventPattern, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { createMulterOptions, fillObject } from '@taskforce/core';
-import { UserRole } from '@taskforce/shared-types';
+import { createMulterOptions, createPattern, fillObject } from '@taskforce/core';
+import { CommandMessage, UserRole } from '@taskforce/shared-types';
 import { ActionData } from './action-data.interface';
 
 import CreateTaskDto from './dto/create-task.dto';
@@ -138,5 +139,25 @@ export class TaskController {
 
     const updatedTask = await this.taskService.uploadPicture(taskId, dto, user);
     return fillObject(TaskRdo, updatedTask, [ResponseGroup.Picture]);
+  }
+
+  @MessagePattern(createPattern(
+    CommandMessage.GetNewTasks
+    ))
+  public async getNewTask(
+    @Payload() data: any,
+    @Ctx() context: RmqContext
+  ){
+    const unsentTasks = this.taskService.getUnsentTasks()
+    return fillObject(TaskRdo, unsentTasks);
+  }
+
+  @EventPattern(createPattern(
+    CommandMessage.MarkTasksAsSent
+  ))
+  public async markTasksAsSent(
+    @Payload('taskIds') taskIds: number[]
+  ){
+    await this.taskService.markTasksAsSent(taskIds);
   }
 }

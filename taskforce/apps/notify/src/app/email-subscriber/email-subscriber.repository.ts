@@ -1,6 +1,6 @@
 import { CRUDRepository } from '@taskforce/core';
 import { EmailSubscriberEntity } from './email-subscriber.entity';
-import { Subscriber } from '@taskforce/shared-types';
+import { Subscriber, UserRole } from '@taskforce/shared-types';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -38,5 +38,11 @@ export class EmailSubscriberRepository implements CRUDRepository<EmailSubscriber
       .findOne({ email })
       .exec()
   }
+
+  public async findByRole(userRole: UserRole): Promise<Subscriber[]> {
+    return this.emailSubscriberModel
+      .find({ role: userRole })
+      .exec();
+  }
 }
-1
+

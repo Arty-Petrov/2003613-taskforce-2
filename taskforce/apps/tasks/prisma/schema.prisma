@@ -32,6 +32,7 @@ model Task {
   applicantsIds    String[]
   commentsCount    Int        @default(0)
   isReviewed       Boolean    @default(false)
+  isSent       Boolean    @default(false)
 }
 
 model Category {

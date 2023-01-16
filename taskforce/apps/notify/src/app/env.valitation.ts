@@ -59,6 +59,12 @@ class EnvironmentsConfig {
   public RABBIT_NOTIFY_SERVICE_QUEUE: string;
 
   @IsString({
+    message: EnvValidationMessage.RMQSubscriberQueue
+  })
+
+  public RABBIT_TASKS_SERVICE_QUEUE: string;
+
+  @IsString({
     message: EnvValidationMessage.MailServerHostRequired
   })
   public MAIL_SMTP_HOST: string;

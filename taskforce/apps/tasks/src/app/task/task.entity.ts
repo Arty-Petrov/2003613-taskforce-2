@@ -19,6 +19,7 @@ export class TaskEntity implements Entity<TaskEntity>, Task {
   public applicantsIds?: string[];
   public commentsCount: number;
   public isReviewed: boolean;
+  public isSent: boolean;
 
   constructor(task:Task) {
     this.fillEntity(task);
@@ -49,5 +50,6 @@ export class TaskEntity implements Entity<TaskEntity>, Task {
     this.applicantsIds = entity.applicantsIds;
     this.commentsCount = entity.commentsCount;
     this.isReviewed = entity.isReviewed;
+    this.isSent = entity.isSent;
   }
 }
