@@ -13,11 +13,6 @@ import { JwtRefreshModule } from './jwt-refresh.module';
 
 @Module({
     imports: [
-      UserModule,
-      PassportModule,
-      TokenSessionModule,
-      JwtAccessModule,
-      JwtRefreshModule,
       ClientsModule.registerAsync([
         {
           name: RABBITMQ_SERVICE,
@@ -25,6 +20,11 @@ import { JwtRefreshModule } from './jwt-refresh.module';
           inject: [ConfigService]
         }
       ]),
+      UserModule,
+      PassportModule,
+      TokenSessionModule,
+      JwtAccessModule,
+      JwtRefreshModule,
     ],
   controllers: [AuthController],
   providers: [AuthService],

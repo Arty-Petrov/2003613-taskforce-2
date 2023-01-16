@@ -1,6 +1,6 @@
 import { ConflictException, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { createEvent } from '@taskforce/core';
+import { createPattern } from '@taskforce/core';
 import { CommandEvent, User } from '@taskforce/shared-types';
 import { RABBITMQ_SERVICE } from '../app.constant';
 import { LoginUserDto } from '../auth/dto/login-user.dto';
@@ -42,11 +42,12 @@ export class UserService {
     const createdUser = await this.userRepository.create(userEntity);
 
     this.rabbitClient.emit(
-      createEvent(CommandEvent.AddSubscriber),
+      createPattern(CommandEvent.AddSubscriber),
       {
         email: createdUser.email,
-        lastname: createdUser.name,
+        name: createdUser.name,
         userId: createdUser._id.toString(),
+        role: createdUser.role,
       }
     );
 

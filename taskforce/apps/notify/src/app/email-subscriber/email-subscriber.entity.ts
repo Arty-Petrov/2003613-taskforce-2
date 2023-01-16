@@ -1,4 +1,4 @@
-import { Entity } from '@taskforce/shared-types';
+import { Entity, UserRole } from '@taskforce/shared-types';
 import { Subscriber } from '@taskforce/shared-types';
 
 export class EmailSubscriberEntity implements Entity<EmailSubscriberEntity>, Subscriber {
@@ -6,6 +6,7 @@ export class EmailSubscriberEntity implements Entity<EmailSubscriberEntity>, Sub
   public email: string;
   public name: string;
   public userId: string;
+  public role: UserRole;
 
   constructor(emailSubscriber: Subscriber) {
     this.fillEntity(emailSubscriber);
@@ -16,6 +17,7 @@ export class EmailSubscriberEntity implements Entity<EmailSubscriberEntity>, Sub
     this.userId = entity.userId;
     this.name = entity.name;
     this.id = entity.id ?? '';
+    this.role = entity.role;
   }
 
   public toObject(): EmailSubscriberEntity {

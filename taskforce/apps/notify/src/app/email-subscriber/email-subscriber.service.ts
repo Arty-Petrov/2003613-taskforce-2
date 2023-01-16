@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Subscriber, UserRole } from '@taskforce/shared-types';
 import { MailService } from '../mail/mail.service';
 import { EmailSubscriberRepository } from './email-subscriber.repository';
 import { CreateSubscriberDto } from './dto/create-subscriber.dto';
@@ -13,7 +14,6 @@ export class EmailSubscriberService {
   ) {}
 
   public async addSubscriber(subscriber: CreateSubscriberDto) {
-    console.log({...subscriber});
     const { email } = subscriber;
     const existsSubscriber = await this.emailSubscriberRepository.findByEmail(email);
 
@@ -25,5 +25,9 @@ export class EmailSubscriberService {
 
     return this.emailSubscriberRepository
       .create(new EmailSubscriberEntity(subscriber));
+  }
+
+  public async getSubscribersByRole(userRole: UserRole = undefined): Promise<Subscriber[]> {
+    return this.emailSubscriberRepository.findByRole(userRole);
   }
 }

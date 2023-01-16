@@ -6,7 +6,10 @@ import { TaskRepository } from './task.repository';
 import { TaskService } from './task.service';
 
 @Module({
-  imports: [TaskCategoryModule, TaskTagModule],
+  imports: [
+    TaskCategoryModule,
+    TaskTagModule
+  ],
   controllers: [TaskController],
   providers: [TaskService, TaskRepository],
 })

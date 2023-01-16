@@ -58,7 +58,7 @@ export class TaskRepository implements CRUDRepository<TaskEntity, number, Task>{
     return this.adaptEntryToTask(task);
   }
 
-  public async find({
+  public async findByFilter({
     executorId, clientId, categoryId, status,
     city, tag, sortOrder, sortType, page, limit
     }: FilterParams) {
@@ -92,6 +92,28 @@ export class TaskRepository implements CRUDRepository<TaskEntity, number, Task>{
     return this.adaptEntriesToTask(tasks);
   }
 
+  public async findUnsent(): Promise<Task[]> {
+    const tasks = await this.prisma.task.findMany({
+      where: {
+        isSent: false,
+      },
+      include: {
+        category: true,
+      }
+    });
+    return this.adaptEntriesToTask(tasks);
+  }
+
+  public async markAsSent(taskIds: number[]): Promise<void> {
+    await this.prisma.task.updateMany({
+      where: {
+        id: {in: taskIds},
+      },
+      data: {
+        isSent: true,
+      },
+    });
+  }
 
   public async findById(id: number): Promise<Task | null> {
     const task = await this.prisma.task.findFirst({

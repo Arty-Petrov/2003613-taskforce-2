@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
-import { CommandEvent, Routes } from '@taskforce/shared-types';
+import { CommandEvent, CommandMessage, Routes } from '@taskforce/shared-types';
 import {plainToInstance, ClassConstructor} from 'class-transformer';
 import * as dayjs from 'dayjs';
 import { Express } from 'express';
@@ -57,7 +57,7 @@ export function createMulterOptions(maxFileSize: number) {
   }
 }
 
-export function createEvent(commandEvent: CommandEvent){
-  return { cmd: commandEvent };
+export function createPattern(command: CommandEvent | CommandMessage){
+  return { cmd: command };
 }
 

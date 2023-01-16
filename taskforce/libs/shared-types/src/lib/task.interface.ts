@@ -22,4 +22,5 @@ export interface Task {
   applicantsIds?: string[],
   commentsCount?: number;
   isReviewed?: boolean;
+  isSent?: boolean;
 }
