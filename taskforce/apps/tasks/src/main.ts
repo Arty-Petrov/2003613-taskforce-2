@@ -27,8 +27,7 @@ async function bootstrap() {
   SwaggerModule.setup('spec', tasksApp, document);
 
   const configService = tasksApp.get<ConfigService>(ConfigService);
-  tasksApp.connectMicroservice(getRabbitMqConfig(configService));
-  Logger.log(getRabbitMqConfig(configService));
+  tasksApp.connectMicroservice(getRabbitMqConfig.Tasks(configService));
 
   await tasksApp.startAllMicroservices();
 

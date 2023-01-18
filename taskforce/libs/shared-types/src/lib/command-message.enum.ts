@@ -3,6 +3,7 @@ export enum CommandMessage {
   GetSubscribers = 'getRecipients',
   SendNewTasks = 'sendNewTasks',
   MarkTasksAsSent = 'markTasksAsSent',
+  ValidateUser = 'validateUser',
   IncreaseCounterTasks = 'increaseCounterTasks',
   IncreaseComments = 'increaseCounterComments',
   IncreaseCounterApplicants = 'increaseCounterApplicants',

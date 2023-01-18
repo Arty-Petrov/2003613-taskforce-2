@@ -11,12 +11,13 @@ import {
   Post,
   Query,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { Ctx, EventPattern, MessagePattern, Payload, RmqContext } from '@nestjs/microservices';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
-import { createMulterOptions, createPattern, fillObject } from '@taskforce/core';
+import { AuthUserData, createMulterOptions, createPattern, fillObject, JwtAuthGuard } from '@taskforce/core';
 import { CommandMessage, UserRole } from '@taskforce/shared-types';
 import { ActionData } from './action-data.interface';
 
@@ -74,17 +75,18 @@ export class TaskController {
   }
 
   @Get('my')
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     type: TaskRdo,
     status: HttpStatus.OK,
     description: 'The new task was successfully created.'
   })
-  async getMy(@Query () query: TaskQuery){
-    //Hardcode before Rabbit implementation
-    const userId = '12';
-    const userRole = UserRole.Executor
+  async getMy(
+    @AuthUserData('sub') id: string,
+    @AuthUserData('role') role: UserRole,
+    @Query () query: TaskQuery, ){
     const tasks = await this.taskService
-      .getMyTasks(query, {userRole: userRole, userId: userId});
+      .getMyTasks(query, {userRole: role, userId: id});
     return fillObject(TaskRdo, tasks);
   }
 

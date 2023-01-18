@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CRUDRepository } from '@taskforce/core';
+import { CRUDRepository } from '@taskforce/shared-types';
 import { City, FileElement, SortOrder, SortType, Task, TaskStatus } from '@taskforce/shared-types';
 import { PrismaService } from '../prisma/prisma.service';
 import { FilterParams } from './query/filter-params.interface';

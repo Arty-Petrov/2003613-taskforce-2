@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CRUDRepository } from '@taskforce/core';
+import { CRUDRepository } from '@taskforce/shared-types';
 import { TaskCategory } from '@taskforce/shared-types';
 import { PrismaService } from '../prisma/prisma.service';
 import { TaskCategoryEntity } from './task-category.entity';

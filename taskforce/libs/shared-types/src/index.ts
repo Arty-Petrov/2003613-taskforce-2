@@ -8,6 +8,7 @@ export * from './lib/routes.enum';
 export * from './lib/sort-order.enum';
 export * from './lib/sort-type.enum';
 export * from './lib/comment.interface';
+export * from './lib/crud-repository.interface';
 export * from './lib/entity.interface';
 export * from './lib/request.interface';
 export * from './lib/response.interface';
@@ -23,3 +24,4 @@ export * from './lib/user-executor.interface';
 export * from './lib/user-main.interface';
 export * from './lib/task-tag.interface';
 export * from './lib/jwt-payload.interface';
+

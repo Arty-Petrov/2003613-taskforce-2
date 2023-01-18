@@ -19,9 +19,14 @@ class EnvironmentsConfig {
   public RABBIT_HOST: string;
 
   @IsString({
-    message: EnvValidationMessage.RMQSubscriberQueue
+    message: EnvValidationMessage.RMQTasksQueue
   })
   public RABBIT_TASKS_SERVICE_QUEUE: string;
+
+@IsString({
+  message: EnvValidationMessage.RMQAuthQueue
+})
+public RABBIT_AUTH_SERVICE_QUEUE: string;
 }
 
 export function validateEnvironments(config: Record<string, unknown>) {
