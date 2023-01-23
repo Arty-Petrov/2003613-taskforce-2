@@ -1,8 +1,7 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { ClientProxy } from '@nestjs/microservices';
 import { fillObject } from '@taskforce/core';
-import { JwtPayload, RmqService } from '@taskforce/shared-types';
+import { AuthUser } from '@taskforce/shared-types';
 import { TokenSessionEntity } from '../tokens/token-session.entity';
 import TokenSessionRepository from '../tokens/token-session.repository';
 import { AuthApiError } from './auth.constant';
@@ -14,16 +13,17 @@ export class AuthService {
   constructor(
     @Inject('JwtAccessService') private readonly jwtAccessService: JwtService,
     @Inject('JwtRefreshService') private readonly jwtRefreshService: JwtService,
-    @Inject(RmqService.Auth) private readonly rabbitAuthClient: ClientProxy,
     private readonly tokenSessionRepository: TokenSessionRepository,
   ) {}
 
-  private createPayload(dto: TokenDataDto): JwtPayload {
-    const { id, email, role } = dto;
+  private createPayload(dto: TokenDataDto): AuthUser {
+    const { id, email, role, name, avatar } = dto;
     return {
       sub: id,
       email: email,
       role: role,
+      name: name,
+      avatar: avatar,
     };
   }
 

@@ -6,5 +6,7 @@ export enum EnvValidationMessage {
   RMQUserRequired = 'RabbitMQ user is required',
   RMQPasswordRequired = 'RabbitMQ password is required',
   RMQTasksQueue = 'RabbitMQ Tasks Queue is required',
+  RMQCommentsQueue = 'RabbitMQ Comments Queue is required',
   RMQAuthQueue = 'RabbitMQ Auth Queue is required',
+  MulterDestinationFolder = 'Multer destination folder is required',
 }

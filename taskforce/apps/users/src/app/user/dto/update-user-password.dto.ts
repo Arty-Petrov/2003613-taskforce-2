@@ -1,22 +1,15 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { UserApiDescription } from '../user.constant';
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import UserDto from './user.dto';
 
-export default class UpdateUserPasswordDto {
-  @ApiProperty({
-    description: UserApiDescription.Email,
-    example: 'user@user.local'
-  })
-  public email: string;
+export default class UpdateUserPasswordDto extends PickType(UserDto,
+  ['email', 'password', 'passwordUpdate']
+) {
+  @ApiProperty({required: true})
+  public email;
 
-  @ApiProperty({
-    description: UserApiDescription.CurrentPassword,
-    example: '123456'
-  })
-  public currentPassword: string;
+  @ApiProperty({required: true})
+  public password;
 
-  @ApiProperty({
-    description: UserApiDescription.NewPassword,
-    example: '234567'
-  })
-  public newPassword: string;
+  @ApiProperty({required: true})
+  public passwordUpdate: string;
 }

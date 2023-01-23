@@ -1,41 +1,24 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { InputExample } from '@taskforce/shared-types';
+import { PickType } from '@nestjs/swagger';
+import { UserInfo } from '@taskforce/shared-types';
 import { Expose } from 'class-transformer';
-import { CommentApiDescription } from '../comment.constant';
+import CommentDto from '../dto/comment.dto';
 
-export default class CommentRdo {
-  @ApiProperty({
-    description: CommentApiDescription.Id,
-    example: InputExample.PostgreId,
-  })
-  @Expose()
-  public id: number;
 
-  @ApiProperty({
-    description: CommentApiDescription.AuthorId,
-    example: InputExample.MongoId,
-  })
+export default class CommentRdo extends PickType(CommentDto,
+  ['id', 'taskId', 'publishedAt', 'text']
+) {
   @Expose()
-  public authorId: string;
+  public id;
 
-  @ApiProperty({
-    description: CommentApiDescription.TaskId,
-    example: InputExample.PostgreId,
-  })
   @Expose()
-  public taskId: number;
+  public author: UserInfo;
 
-  @ApiProperty({
-    description: CommentApiDescription.PublishAt,
-    example: InputExample.DateIso,
-  })
   @Expose()
-  public publishAt: Date;
+  public taskId;
 
-  @ApiProperty({
-    description: CommentApiDescription.Text,
-    example: InputExample.Text,
-  })
   @Expose()
-  public text: string;
+  public publishedAt;
+
+  @Expose()
+  public text;
 }

@@ -1,9 +1,7 @@
+import { PortRange } from '@taskforce/shared-types';
 import { plainToInstance } from 'class-transformer';
 import {IsNumber, IsString, Max, Min, validateSync} from 'class-validator';
 import {EnvValidationMessage} from './app.constant';
-
-const MIN_PORT = 0;
-const MAX_PORT = 65535;
 
 class EnvironmentsConfig {
   @IsString({
@@ -19,8 +17,8 @@ class EnvironmentsConfig {
   @IsNumber({}, {
     message: EnvValidationMessage.DBPortRequired
   })
-  @Min(MIN_PORT)
-  @Max(MAX_PORT)
+  @Min(PortRange.Min)
+  @Max(PortRange.Max)
   public MONGO_PORT: number;
 
   @IsString({
@@ -54,10 +52,19 @@ class EnvironmentsConfig {
   public RABBIT_HOST: string;
 
   @IsString({
-    message: EnvValidationMessage.RMQSubscriberQueue
+    message: EnvValidationMessage.RMQAuthQueue
   })
-  public RABBIT_USERS_SERVICE_QUEUE: string;
+  public RABBIT_AUTH_SERVICE_QUEUE: string;
 
+  @IsString({
+    message: EnvValidationMessage.RMQNotifyQueue
+  })
+  public RABBIT_NOTIFY_SERVICE_QUEUE: string;
+
+  @IsString({
+    message: EnvValidationMessage.MulterDestinationFolder
+  })
+  public MULTER_DEST: string;
 }
 
 export function validateEnvironments(config: Record<string, unknown>) {

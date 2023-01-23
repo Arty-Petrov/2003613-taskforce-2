@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CRUDRepository } from '@taskforce/shared-types';
-import { City, FileElement, SortOrder, SortType, Task, TaskStatus } from '@taskforce/shared-types';
+import { City, CRUDRepository, FileElement, SortOrder, SortType, Task, TaskStatus } from '@taskforce/shared-types';
 import { PrismaService } from '../prisma/prisma.service';
 import { FilterParams } from './query/filter-params.interface';
 import { TaskEntity } from './task.entity';
@@ -12,7 +11,10 @@ export class TaskRepository implements CRUDRepository<TaskEntity, number, Task>{
     private readonly prisma: PrismaService
   ) {}
 
-  private async adaptEntryToTask(entry: Entry): Promise<Task> {
+  private async adaptEntryToTask(entry: Entry): Promise<Task | null> {
+    if (!entry) {
+      return null;
+    }
     return {
       ...entry,
       taskPicture: entry.taskPicture as FileElement,
@@ -22,6 +24,9 @@ export class TaskRepository implements CRUDRepository<TaskEntity, number, Task>{
   }
 
   private async adaptEntriesToTask(entries: Entry[]): Promise<Task[]> {
+    if (entries.length) {
+      return entries as Task[]
+    }
     let tasks: Task[] = [];
     for (const entry of entries)  {
       const task = await this.adaptEntryToTask(entry);
@@ -136,12 +141,13 @@ export class TaskRepository implements CRUDRepository<TaskEntity, number, Task>{
       data: {
         status: entityData.status,
         publishAt: entityData.publishAt,
-        taskPicture: JSON.stringify(entityData.taskPicture),
+        taskPicture: entityData.taskPicture as string,
         executorId: entityData.executorId,
-        applicantsCount: entityData.applicantsCount,
-        applicantsIds: entityData.applicantsIds,
+        requestsCount: entityData.requestsCount,
+        requesterIds: entityData.requesterIds,
         commentsCount: entityData.commentsCount,
-        isReviewed: entityData.isReviewed,
+        commentIds: entityData.commentIds,
+        isResponsed: entityData.isResponsed,
       },
       include: {
         tags: true,

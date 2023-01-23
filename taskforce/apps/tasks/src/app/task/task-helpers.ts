@@ -1,5 +1,4 @@
-import { TaskStatus } from '@taskforce/shared-types';
-import { TaskAction } from './task.constant';
+import { TaskAction, TaskStatus } from '@taskforce/shared-types';
 
 export function adaptTaskStatusToAction(newStatus: TaskStatus): TaskAction{
   switch (newStatus) {

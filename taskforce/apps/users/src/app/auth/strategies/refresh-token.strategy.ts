@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { JwtPayload } from '@taskforce/shared-types';
+import { AuthUser } from '@taskforce/shared-types';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
@@ -21,9 +21,9 @@ export class RefreshTokenStrategy extends PassportStrategy(
     });
   }
 
-  async validate(req: Request, { sub, email, role }: JwtPayload) {
+  async validate(req: Request, { sub, email, role, name, avatar }: AuthUser) {
     const id = sub;
     const refreshToken = req.get('Authorization').replace('Bearer', '').trim();
-    return { id, email, role, refreshToken};
+    return { id, email, role, name, avatar, refreshToken};
   }
 }

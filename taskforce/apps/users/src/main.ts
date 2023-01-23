@@ -1,12 +1,14 @@
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as process from 'process';
-
 import { AppModule } from './app/app.module';
+import { getRabbitMqConfig } from './config/rabbitmq.config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const usersApp = await NestFactory.create(AppModule);
+
 
   const config = new DocumentBuilder()
     .setTitle('The «Users» service')
@@ -15,17 +17,22 @@ async function bootstrap() {
     .build();
 
   const globalPrefix = 'api';
-  app.setGlobalPrefix(globalPrefix);
+  usersApp.setGlobalPrefix(globalPrefix);
 
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('spec', app, document);
+  const document = SwaggerModule.createDocument(usersApp, config);
+  SwaggerModule.setup('spec', usersApp, document);
 
-  app.useGlobalPipes(new ValidationPipe({
+  const configService = usersApp.get<ConfigService>(ConfigService);
+  usersApp.connectMicroservice(getRabbitMqConfig.Auth(configService));
+
+  await usersApp.startAllMicroservices();
+
+  usersApp.useGlobalPipes(new ValidationPipe({
     skipUndefinedProperties: true
   }));
 
   const port = process.env.PORT || 3333;
-  await app.listen(port);
+  await usersApp.listen(port);
   Logger.log(
     `🚀 Users application is running on: http://localhost:${port}/${globalPrefix}`
   );

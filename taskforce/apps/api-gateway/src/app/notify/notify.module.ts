@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ClientsModule } from '@nestjs/microservices';
-import { RmqService } from '@taskforce/shared-types';
+import { RmqServiceName } from '@taskforce/shared-types';
 import { getRabbitMqConfig } from '../../config/rabbitmq.config';
 import { NotifyController } from './notify.controller';
 import { NotifyService } from './notify.service';
@@ -10,12 +10,17 @@ import { NotifyService } from './notify.service';
   imports: [
     ClientsModule.registerAsync([
       {
-        name: RmqService.Notify,
+        name: RmqServiceName.Auth,
+        useFactory: getRabbitMqConfig.Auth,
+        inject: [ConfigService]
+      },
+      {
+        name: RmqServiceName.Notify,
         useFactory: getRabbitMqConfig.Notify,
         inject: [ConfigService]
       },
       {
-        name: RmqService.Tasks,
+        name: RmqServiceName.Tasks,
         useFactory: getRabbitMqConfig.Tasks,
         inject: [ConfigService]
       },

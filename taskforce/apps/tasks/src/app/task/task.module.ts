@@ -20,8 +20,8 @@ import { TaskService } from './task.service';
         inject: [ConfigService]
       },
       {
-        name: RmqServiceName.Tasks,
-        useFactory: getRabbitMqConfig.Tasks,
+        name: RmqServiceName.Comments,
+        useFactory: getRabbitMqConfig.Comments,
         inject: [ConfigService]
       },
     ]),

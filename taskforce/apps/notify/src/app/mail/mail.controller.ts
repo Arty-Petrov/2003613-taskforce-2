@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { createPattern } from '@taskforce/core';
-import { CommandMessage, Subscriber } from '@taskforce/shared-types';
+import { CommandNotify, Subscriber } from '@taskforce/shared-types';
 import { MailService } from './mail.service';
 
 @Controller()
@@ -10,7 +10,7 @@ export class MailController {
     private readonly mailService: MailService,
   ) {}
   @MessagePattern(createPattern(
-    CommandMessage.SendNewTasks
+    CommandNotify.SendNewTasks
     )
   )
   public async notifyNewTasks(

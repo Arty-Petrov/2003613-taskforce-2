@@ -1,4 +1,4 @@
-import { CRUDRepository } from '@taskforce/core';
+import { CRUDRepository } from '@taskforce/shared-types';
 import { EmailSubscriberEntity } from './email-subscriber.entity';
 import { Subscriber, UserRole } from '@taskforce/shared-types';
 import { Injectable } from '@nestjs/common';

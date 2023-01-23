@@ -1,36 +1,26 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Transform } from 'class-transformer';
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import RequestDto from './request.dto';
 
-export default class CreateRequestDto {
+export default class CreateRequestDto extends PickType(RequestDto,
+  ['executorId', 'taskId', 'text', 'costProposal']
+) {
   @ApiProperty({
-    description: 'The request text, string length min 10 max 300 characters',
-    example: 'Some text…',
+    required: false,
   })
-  public requestText: string;
-
-  @ApiProperty({
-    description: 'Task estimation executor\'s proposal, zero or positive number',
-    example: '1500'
-  })
-  @Transform(({value}) => +value)
-  public costProposal?: number;
+  public executorId;
 
   @ApiProperty({
-    description: 'Request creator id',
-    example: 'd04eb35d-c36f-4e2b-b828-136379c7c6e3'
+    required: true,
   })
-  public executorId: string;
+  public taskId;
 
   @ApiProperty({
-    description: 'Requested task id',
-    example: '4353642828136379763'
+    required: true,
   })
-  @Transform(({value}) => +value)
-  public taskId: number;
+  public text;
 
   @ApiProperty({
-    description: 'Request creation date (ISO format)',
-    example: '2022-11-06'
+    required: false,
   })
-  public publishedAt?: Date;
+  public costProposal;
 }

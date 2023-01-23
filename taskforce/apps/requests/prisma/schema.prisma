@@ -13,10 +13,10 @@ datasource db {
 
 model Request {
   id             Int             @id @default(autoincrement())
-  requestText   String
-  costProposal   Int
   executorId     String
   taskId         Int
+  text           String
+  costProposal   Int             @default(0)
   publishedAt    DateTime        @default(now())
   createdAt      DateTime        @default(now())
 }

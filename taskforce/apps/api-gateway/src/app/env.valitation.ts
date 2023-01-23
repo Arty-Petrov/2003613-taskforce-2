@@ -4,6 +4,9 @@ import { EnvValidationMessage } from './app.constant';
 
 class EnvironmentsConfig {
 
+  @IsString({
+    message: EnvValidationMessage.RMQUserRequired
+  })
   public RABBIT_USER: string;
 
   @IsString({
@@ -17,14 +20,34 @@ class EnvironmentsConfig {
   public RABBIT_HOST: string;
 
   @IsString({
-    message: EnvValidationMessage.RMQSubscriberQueue
+    message: EnvValidationMessage.RMQAuthQueueRequired
+  })
+  public RABBIT_AUTH_SERVICE_QUEUE: string;
+
+  @IsString({
+    message: EnvValidationMessage.RMQCommentsQueueRequired
+  })
+  public RABBIT_COMMENTS_SERVICE_QUEUE: string;
+
+  @IsString({
+    message: EnvValidationMessage.RMQNotifyQueueRequired
   })
   public RABBIT_NOTIFY_SERVICE_QUEUE: string;
 
   @IsString({
-    message: EnvValidationMessage.RMQTasksQueue
+    message: EnvValidationMessage.RMQRequestsQueueRequired
   })
+  public RABBIT_REQUESTS_SERVICE_QUEUE: string;
 
+
+  @IsString({
+    message: EnvValidationMessage.RMQResponsesQueueRequired
+  })
+  public RABBIT_RESPONSES_SERVICE_QUEUE: string;
+
+  @IsString({
+    message: EnvValidationMessage.RMQTasksQueueRequired
+  })
   public RABBIT_TASKS_SERVICE_QUEUE: string;
 }
 

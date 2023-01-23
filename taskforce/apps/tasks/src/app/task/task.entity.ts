@@ -15,10 +15,11 @@ export class TaskEntity implements Entity<TaskEntity>, Task {
   public tags: TaskTag[];
   public taskPicture: FileElement;
   public executorId: string;
-  public applicantsCount: number;
-  public applicantsIds?: string[];
+  public requestsCount: number;
+  public requesterIds?: string[];
   public commentsCount: number;
-  public isReviewed: boolean;
+  public commentIds: number[];
+  public isResponsed: boolean;
   public isSent: boolean;
 
   constructor(task:Task) {
@@ -46,10 +47,11 @@ export class TaskEntity implements Entity<TaskEntity>, Task {
     this.tags = entity.tags;
     this.taskPicture = {...entity.taskPicture};
     this.executorId = entity.executorId;
-    this.applicantsCount = entity.applicantsCount;
-    this.applicantsIds = entity.applicantsIds;
+    this.requestsCount = entity.requestsCount;
+    this.requesterIds = entity.requesterIds;
     this.commentsCount = entity.commentsCount;
-    this.isReviewed = entity.isReviewed;
+    this.commentIds = entity.commentIds;
+    this.isResponsed = entity.isResponsed;
     this.isSent = entity.isSent;
   }
 }

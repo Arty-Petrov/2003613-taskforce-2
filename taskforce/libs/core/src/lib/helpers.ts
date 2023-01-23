@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, NotFoundException } from '@nestjs/common';
-import { CommandEvent, CommandMessage, Routes } from '@taskforce/shared-types';
+import { Routes, User, UserField } from '@taskforce/shared-types';
 import {plainToInstance, ClassConstructor} from 'class-transformer';
 import * as dayjs from 'dayjs';
 import { Express } from 'express';
@@ -42,7 +42,7 @@ export function createMulterOptions(maxFileSize: number) {
           throw new NotFoundException();
         }
 
-        const userId = user._id;
+        const userId = user.id;
         const routeId = (id) ? `-${id}` : '';
 
         const timestamp = `-${dayjs().unix()}`
@@ -57,7 +57,36 @@ export function createMulterOptions(maxFileSize: number) {
   }
 }
 
-export function createPattern(command: CommandEvent | CommandMessage){
+export function createPattern<T>(command: T) {
   return { cmd: command };
 }
 
+export function addUserData<T>(items: T | T[], users: User | User[], fieldName: UserField) {
+  let itemsArray: T[] = [];
+  let usersArray: User[] = [];
+  console.log('export function addUserData', items, users);
+  if (!Array.isArray(items) && items !== null) {
+    itemsArray.push(items);
+  } else if (Array.isArray(items) && items?.length){
+    itemsArray = [...items];
+  } else {
+    itemsArray = [];
+  }
+
+  if (!Array.isArray(users) && users !== null) {
+    usersArray.push(users);
+  } else if (Array.isArray(users) && users?.length){
+    usersArray = [...users];
+  } else {
+    return itemsArray;
+  }
+
+  return itemsArray.map((item) => {
+    const user = usersArray
+      .find((user) => user?._id === item[`${fieldName}Id`])
+    delete item[`${fieldName}Id`];
+    const {_id: id, name, avatar, email} = user;
+
+    return {...item, [fieldName]: {id, name, avatar, email}}
+  });
+}

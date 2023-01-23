@@ -1,6 +1,6 @@
 import { CanActivate, ExecutionContext, Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { CommandMessage, RmqServiceName } from '@taskforce/shared-types';
+import { CommandUser, RmqServiceName } from '@taskforce/shared-types';
 import { catchError, Observable, tap } from 'rxjs';
 import { createPattern } from '../helpers';
 
@@ -11,15 +11,13 @@ export class JwtAuthGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    console.log('auth');
     const authentication = this.getAuthentication(context);
     return this.authRmqClient
-      .send(createPattern(CommandMessage.ValidateUser), {
+      .send(createPattern(CommandUser.ValidateUser), {
         Authentication: authentication,
       })
       .pipe(
         tap((res) => {
-          console.log('Auth', res, context);
           this.addUser(res, context);
         }),
         catchError(() => {
@@ -41,7 +39,6 @@ export class JwtAuthGuard implements CanActivate {
         'No value was provided for Authentication',
       );
     }
-    console.log('Auth', authentication);
     return authentication;
   }
 

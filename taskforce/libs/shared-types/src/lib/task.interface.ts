@@ -18,9 +18,10 @@ export interface Task {
   tags?: TaskTag[];
   taskPicture?: FileElement;
   executorId?: string;
-  applicantsCount?: number;
-  applicantsIds?: string[],
+  requestsCount?: number;
+  requesterIds?: string[],
   commentsCount?: number;
-  isReviewed?: boolean;
+  commentIds?: number[];
+  isResponsed?: boolean;
   isSent?: boolean;
 }

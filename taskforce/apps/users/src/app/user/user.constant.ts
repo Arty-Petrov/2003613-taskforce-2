@@ -35,6 +35,7 @@ export const UserApiError = {
   NameNotValid: `User name, min ${UserNameLength.Min}, max ${UserNameLength.Max} chars length`,
   NotFound: 'User not found',
   OccupationNotValid: `Maximum count of executor's occupation is ${UserOccupationCount.Max}`,
+  OccupationNotAllowed: `Only users with ${UserRole.Executor} role can have an occupations list`,
   PasswordNotValid: `Password min length is  ${UserPasswordLength.Min}, max is ${UserPasswordLength.Max}`,
   PasswordIsWrong: 'User password is wrong',
   RoleIsWrong: `User role field must contains any of these values: ${Object.values(UserRole).join(', ')}`,
@@ -42,19 +43,21 @@ export const UserApiError = {
 } as const;
 
 export const UserApiDescription = {
-  Image: 'User avatar data object',
+  Image: `User avatar data object, file type *.png/jpg/jpeg and max size ${MAX_FILE_SIZE} bytes allowed to upload`,
   City: `User city name, any of these values: ${Object.values(City).join(', ')}\``,
   CurrentPassword: `User's current password`,
   DateBirth: 'User birth date, ISO8601 string',
   Email: 'User unique email address',
+  EvaluationSum: 'Sum of user\'s evaluations',
   Id: 'The uniq user id',
   Info: `Optional user info, max ${UserInfoLength.Max} chars length`,
   Name: `User name and surname, min ${UserNameLength.Min}, max ${UserNameLength.Max} chars`,
-  NewPassword: `New password, min ${UserPasswordLength.Min}, max ${UserPasswordLength.Max} chars length`,
   Occupation: `List of executor\'s occupations, max count is ${UserOccupationCount.Max}`,
   Password: `User password, min ${UserPasswordLength.Min}, max ${UserPasswordLength.Max} chars length`,
+  PasswordUpdate: `New password, min ${UserPasswordLength.Min}, max ${UserPasswordLength.Max} chars length`,
   Rank: 'Executor rank',
   Rating: 'Executor rating',
+  ResponsesCount: 'Count of executor\'s responses from clients',
   Role: `Any of user's role values: ${Object.values(UserRole).join(', ')}`,
   TaskDone: 'Count of tasks that executor has done',
   TaskFailed: 'Count of tasks that executor has failed',
@@ -66,4 +69,16 @@ export const UserApiDescription = {
 export enum ResponseGroup {
   Avatar = 'avatar',
   Logged = 'logged',
+}
+
+export enum UserCounter {
+  Published = 'taskPublishedCount',
+  New = 'taskNewCount',
+  Failed = 'taskFailedCount',
+  Done = 'taskDoneCount'
+}
+
+export enum CounterUpdateType {
+  Increase = 1,
+  Decrease = -1,
 }

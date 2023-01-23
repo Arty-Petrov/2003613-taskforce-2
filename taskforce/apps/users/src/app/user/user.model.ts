@@ -31,9 +31,6 @@ export class UserModel extends Document implements User {
   })
   public passwordHash: string;
 
-  @Prop()
-  public refreshTokenHash?: string;
-
   @Prop({
     required: true,
   })
@@ -58,25 +55,25 @@ export class UserModel extends Document implements User {
   @Prop()
   public info?: string;
 
-  @Prop()
+  @Prop({default: 0})
   public taskPublishedCount?: number;
 
-  @Prop()
+  @Prop({default: 0})
   public taskNewCount?: number;
 
   @Prop()
   public occupations?: string[];
 
-  @Prop()
+  @Prop({default: 0})
   public rating?: number;
 
-  @Prop()
+  @Prop({default: 0})
   public rank?: number;
 
-  @Prop()
+  @Prop({default: 0})
   public taskDoneCount?: number;
 
-  @Prop()
+  @Prop({default: 0})
   public taskFailedCount?: number;
 }
 

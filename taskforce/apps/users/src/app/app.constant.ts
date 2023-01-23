@@ -1,5 +1,4 @@
 export const USER_SERVICE_ENV_PATH = 'apps/users/src/environments/.users.env';
-export const RABBITMQ_SERVICE = Symbol('RABBITMQ_SERVICE');
 
 export const enum EnvValidationMessage {
   DBHostRequired = 'MongoDB host is required',
@@ -11,5 +10,7 @@ export const enum EnvValidationMessage {
   RMQHostRequired = 'RabbitMQ host is required',
   RMQUserRequired = 'RabbitMQ user is required',
   RMQPasswordRequired = 'RabbitMQ password is required',
-  RMQSubscriberQueue = 'RabbitMQ Subscribers Queue is required',
+  RMQAuthQueue = 'RabbitMQ Auth Queue is required',
+  RMQNotifyQueue = 'RabbitMQ Notify Queue is required',
+  MulterDestinationFolder = 'Multer destination folder is required',
 }

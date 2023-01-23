@@ -1,43 +1,18 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Comment, InputExample } from '@taskforce/shared-types';
-import { Length } from 'class-validator';
-import { CommentApiDescription, CommentApiError, TextLength } from '../comment.constant';
+import { ApiProperty, PickType } from '@nestjs/swagger';
+import CommentDto from './comment.dto';
 
-export default class CreateCommentDto implements Comment {
-  @ApiProperty({
-    description: CommentApiDescription.Id,
-    example: InputExample.PostgreId
-  })
-  public id: number;
+export default class CreateCommentDto extends PickType(CommentDto,
+  ['taskId', 'text']
+) {
+  public authorId;
 
   @ApiProperty({
-    description: CommentApiDescription.AuthorId,
-    example: InputExample.MongoId,
-  })
-  public authorId: string;
-
-  @ApiProperty({
-    description: CommentApiDescription.TaskId,
-    example: InputExample.PostgreId,
-  })
-  public taskId: number;
-
-  @ApiProperty({
-    description: CommentApiDescription.PublishAt,
-    example: InputExample.DateIso,
-  })
-  public publishAt: Date;
-
-  @ApiProperty({
-    description: CommentApiDescription.Text,
-    example: InputExample.Text,
     required: true,
   })
-  @Length(
-    TextLength.Min,
-    TextLength.Max,
-    {
-      message: CommentApiError.TextNotValid
-    })
-  public text: string;
+  public taskId;
+
+  @ApiProperty({
+    required: true,
+  })
+  public text;
 }

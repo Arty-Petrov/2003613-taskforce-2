@@ -2,10 +2,10 @@ import { Request } from '@taskforce/shared-types';
 
 export default class RequestEntity implements Request {
   public id: number;
-  public requestText: string;
-  public costProposal: number;
   public executorId: string;
   public taskId: number;
+  public text: string;
+  public costProposal: number;
   public publishedAt: Date;
 
   constructor(request: Request) {
@@ -18,10 +18,10 @@ export default class RequestEntity implements Request {
 
   public fillEntity(request: Request) {
     this.id = request.id;
-    this.requestText = request.requestText;
-    this.costProposal = request.costProposal;
     this.executorId = request.executorId;
     this.taskId = request.taskId;
+    this.text = request.text;
+    this.costProposal = request.costProposal;
     this.publishedAt = request.publishedAt;
   }
 }

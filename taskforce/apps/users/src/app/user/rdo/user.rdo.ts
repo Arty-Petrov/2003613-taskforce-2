@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { City, InputExample, FileElement, UserRole } from '@taskforce/shared-types';
 import { Expose, Transform } from 'class-transformer';
+import * as dayjs from 'dayjs';
 import { ResponseGroup, UserApiDescription } from '../user.constant';
 
 export class UserRdo {
@@ -37,8 +38,11 @@ export class UserRdo {
     description: UserApiDescription.DateBirth,
     example: InputExample.Date,
   })
-  @Expose()
-  public dateBirth: string;
+  @Expose({name: 'dateBirth'})
+  @Transform(({ value }) => {
+    return dayjs().diff(value, 'years')
+  })
+  public age: string;
 
   @ApiProperty({
     description: UserApiDescription.Role,
@@ -52,7 +56,9 @@ export class UserRdo {
     example: InputExample.PictureFile,
 
   })
-  @Expose({groups: [ResponseGroup.Avatar, UserRole.Client, UserRole.Executor]})
+  @Expose({
+    groups: [ResponseGroup.Avatar, UserRole.Client, UserRole.Executor]
+  })
   public avatar: FileElement;
 
   @ApiProperty({

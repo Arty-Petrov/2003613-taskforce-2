@@ -1,60 +1,94 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
-import { fillObject } from '@taskforce/core';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { EventPattern, Payload } from '@nestjs/microservices';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { AuthUserData, createPattern, fillObject, JwtAuthGuard } from '@taskforce/core';
+import { AuthUser, CommandComment } from '@taskforce/shared-types';
 import { CommentService } from './comment.service';
 import CreateCommentDto from './dto/create-comment.dto';
 import { CommentQuery } from './query/comment.query';
 import CommentRdo from './rdo/comment.rdo';
 
-@Controller('comment')
+@ApiTags('comments')
+@Controller('comments')
 export class CommentController {
   constructor(
     private commentService: CommentService
   ) {}
 
-  @Post('/')
-
+  @ApiResponse({
+    type: CommentRdo,
+    status: HttpStatus.OK,
+    description: 'Task comment has been successfully created'
+  })
+  @HttpCode(HttpStatus.OK)
+  @Post()
+  @UseGuards(JwtAuthGuard)
   public async create(
+    @AuthUserData() user: AuthUser,
     @Body() dto: CreateCommentDto
   ) {
-    const newComment = await this.commentService.create(dto);
-    return fillObject(CommentRdo, newComment);
-  }
-
-  @Get('/:id')
-
-  public async show(@Param('id', ParseIntPipe) id: string) {
-    const commentId = parseInt(id, 10);
-    const comment = await this.commentService.getCommentById(commentId);
+    const comment = await this.commentService.create(dto, user);
     return fillObject(CommentRdo, comment);
   }
 
-  @Get('/')
-
-  public async index(@Query () query: CommentQuery) {
-    const comments = await this.commentService.getComments(query);
+  @ApiResponse({
+    type: CommentRdo,
+    status: HttpStatus.OK,
+    description: 'Task comments is found'
+  })
+  @HttpCode(HttpStatus.OK)
+  @Get()
+  public async index(
+    @Query () query: CommentQuery,
+  ) {
+    const comments = this.commentService.getComments(query);
     return fillObject(CommentRdo, comments);
   }
 
-  @Delete('/:id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-
-  public async destroy(@Param('id', ParseIntPipe) id: number) {
-    /*
-    Logic for checking if user is not owner of the comment
-    const { authorId } = await this.commentService.getCommentById(id);
-    if (userId !== authorId ) {
-      throw new UnauthorizedException('User can delete own comment only')
-    }
-    */
-    await this.commentService.deleteComment(id);
+  @ApiResponse({
+    type: CommentRdo,
+    status: HttpStatus.OK,
+    description: 'Comment is found'
+  })
+  @HttpCode(HttpStatus.OK)
+  @Get('/:id')
+  @UseGuards(JwtAuthGuard)
+  public async show(
+    @Param('id', ParseIntPipe) commentId: number,
+  ) {
+    const comment = await this.commentService.getById(commentId);
+    return fillObject(CommentRdo, comment);
   }
 
-  @Delete('/:taskId/task')
+  @ApiResponse({
+    status: HttpStatus.NO_CONTENT,
+    description: 'The comment has been deleted'
+  })
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Delete('/:id')
+  @UseGuards(JwtAuthGuard)
+  public async destroy(
+    @AuthUserData() user: AuthUser,
+    @Param('id', ParseIntPipe) commentId: number) {
+    return this.commentService.deleteComment(commentId, user.sub);
+  }
 
-  public async destroyTaskComments(
-    @Param('taskId', ParseIntPipe) taskId: number
-  ) {
-    await this.commentService.deleteCommentsByTaskId(taskId);
+  @EventPattern(createPattern(CommandComment.DeleteTaskComments))
+  public async deleteTaskComments(
+    @Payload('taskId', ParseIntPipe) taskId: number
+  ){
+    return this.commentService.deleteCommentsByTaskId(taskId);
   }
 }

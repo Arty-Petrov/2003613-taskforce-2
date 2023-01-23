@@ -8,6 +8,7 @@ export const rabbitMqOptions = registerAs('rmq', () => ({
   host: process.env.RABBIT_HOST,
   authQueue: process.env.RABBIT_AUTH_SERVICE_QUEUE,
   tasksQueue: process.env.RABBIT_TASKS_SERVICE_QUEUE,
+  commentsQueue: process.env.RABBIT_COMMENTS_SERVICE_QUEUE,
 }));
 
 export function getTasksRMqConfig(configService: ConfigService): RmqOptions {
@@ -15,6 +16,27 @@ export function getTasksRMqConfig(configService: ConfigService): RmqOptions {
   const password = configService.get<string>('rmq.password');
   const host = configService.get<string>('rmq.host');
   const queue = configService.get<string>('rmq.tasksQueue');
+  const url = `amqp://${user}:${password}@${host}`;
+  return {
+    transport: Transport.RMQ,
+    options: {
+      urls: [url],
+      queue: queue,
+      replyQueue: '',
+      persistent: true,
+      noAck: true,
+      queueOptions: {
+        durable: true,
+      }
+    }
+  }
+}
+
+export function getCommentsRMqConfig(configService: ConfigService): RmqOptions {
+  const user = configService.get<string>('rmq.user');
+  const password = configService.get<string>('rmq.password');
+  const host = configService.get<string>('rmq.host');
+  const queue = configService.get<string>('rmq.commentsQueue');
   const url = `amqp://${user}:${password}@${host}`;
   return {
     transport: Transport.RMQ,
@@ -56,5 +78,6 @@ export function getAuthRMqConfig(configService: ConfigService): RmqOptions {
 export const getRabbitMqConfig = {
   Auth: getAuthRMqConfig,
   Tasks: getTasksRMqConfig,
+  Comments: getCommentsRMqConfig,
 
 }

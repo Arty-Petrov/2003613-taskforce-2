@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { City, FileElement, InputExample, TaskStatus, TaskTag } from '@taskforce/shared-types';
+import { City, FileElement, InputExample, TaskCategory, TaskStatus, TaskTag, UserInfo } from '@taskforce/shared-types';
 import { Expose } from 'class-transformer';
 
 export default class TaskRdo {
@@ -28,15 +28,16 @@ export default class TaskRdo {
     description: 'Task creator id',
     example: 'd04eb35d-c36f-4e2b-b828-136379c7c6e3'
   })
+
   @Expose()
-  public clientId: string;
+  public client: UserInfo;
 
   @ApiProperty({
     description: 'Task task-category id',
     example: {id: 1, title: 'Перевозка'}
   })
   @Expose()
-  public categoryId: number;
+  public category: TaskCategory;
 
   @ApiProperty({
     description: 'Task status',

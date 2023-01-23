@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { CRUDRepository } from '@taskforce/core';
+import { CRUDRepository } from '@taskforce/shared-types';
 import { TokenSession } from '@taskforce/shared-types';
 import { Model } from 'mongoose';
 import { TokenSessionModel } from './token-session.model';

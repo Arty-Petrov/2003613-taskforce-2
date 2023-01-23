@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { CRUDRepository } from '@taskforce/core';
+import { CRUDRepository } from '@taskforce/shared-types';
 import { User } from '@taskforce/shared-types';
 import { Model } from 'mongoose';
 import { UserEntity } from './user.entity';
@@ -25,6 +25,23 @@ export default class UserRepository implements CRUDRepository<UserEntity, string
   public async findById(_id: string): Promise<User | null> {
     return this.userModel
       .findOne({_id})
+      .exec();
+  }
+
+  public async findManyByIdsList(userIds: string[]): Promise<User[]> {
+    return this.userModel
+      .find({
+        '_id': { $in: userIds }
+          }
+        )
+      .exec();
+  }
+
+  public async findAllSortedByRating(): Promise<User[]> {
+    return this.userModel
+      .find({})
+      .select('rating')
+      .sort({rating: -1})
       .exec();
   }
 

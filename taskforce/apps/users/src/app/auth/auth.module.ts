@@ -1,9 +1,5 @@
-import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { ClientsModule } from '@nestjs/microservices';
+import { forwardRef, Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
-import { RmqService } from '@taskforce/shared-types';
-import { getRabbitMqConfig } from '../../config/rabbitmq.config';
 import { TokenSessionModule } from '../tokens/token-session.module';
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
@@ -14,14 +10,7 @@ import { LocalStrategy } from './strategies/local.strategy';
 
 @Module({
     imports: [
-      ClientsModule.registerAsync([
-        {
-          name: RmqService.Auth,
-          useFactory: getRabbitMqConfig,
-          inject: [ConfigService]
-        }
-      ]),
-      UserModule,
+      forwardRef(() => UserModule),
       PassportModule,
       TokenSessionModule,
       JwtAccessModule,
@@ -29,6 +18,6 @@ import { LocalStrategy } from './strategies/local.strategy';
     ],
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy],
-  exports: [],
+  exports: [AuthService],
 })
 export class AuthModule {}

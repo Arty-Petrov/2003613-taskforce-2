@@ -4,8 +4,8 @@ export default class CommentEntity implements Comment {
   public id: number;
   public authorId: string;
   public taskId: number;
-  public publishAt: Date;
   public text: string;
+  public publishAt: Date;
 
   constructor(comment:Comment) {
     this.fillEntity(comment);
@@ -19,7 +19,7 @@ export default class CommentEntity implements Comment {
   this.id = comment?.id;
   this.authorId = comment.authorId;
   this.taskId = comment.taskId;
-  this.publishAt = new Date();
   this.text = comment.text;
+  this.publishAt = new Date();
   }
 }

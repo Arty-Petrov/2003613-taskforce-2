@@ -1,7 +1,7 @@
 export interface Comment {
   id?: number;
-  authorId: string;
+  authorId?: string;
   taskId: number;
-  publishAt?: Date;
   text: string;
+  publishAt?: Date;
 }

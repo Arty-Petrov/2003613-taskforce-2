@@ -1,4 +1,5 @@
 import { City } from './city.enum';
+import { TaskStatus } from './task-status.enum';
 import { UserRole } from './user-role.enum';
 
 export const InputExample = {
@@ -10,7 +11,9 @@ export const InputExample = {
   DateIso: '',
   Role: UserRole.Client,
   Rating: '5',
+  Status: TaskStatus.Done,
   Number: '10',
+  Price: '1500',
   Occupations: `['plumber', 'locksmith',  'mechanic']`,
   PictureFile: `{ url: /images/user.png, name: user.png, }`,
   MongoId: '63aac1a8d0fe043efd78f0b3',

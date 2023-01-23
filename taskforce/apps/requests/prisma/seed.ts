@@ -8,13 +8,13 @@ const prisma = new PrismaClient();
 async function fillDb() {
   let requests: Prisma .RequestCreateInput[] = [
     {
-      requestText: 'Новое cообщение',
+      text: 'Новое cообщение',
       costProposal: 3000,
       executorId: '63a898135261f8c9e2ec261d',
       taskId: 1,
     },
     {
-      requestText: 'Новое cообщение',
+      text: 'Новое cообщение',
       costProposal: 3000,
       executorId: '63a898135261f8c9e2ec261d',
       taskId: 2,
